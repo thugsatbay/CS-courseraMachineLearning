@@ -62,21 +62,42 @@ Theta2_grad = zeros(size(Theta2));
 %               and Theta2_grad from Part 2.
 %
 
-
+%J
 a1=[ones(m,1) X];
-a2=sigmoid(a1*Theta1');
+z2=a1*Theta1';
+a2=sigmoid(z2);
 a2=[ones(m,1) a2];
-a3=sigmoid(a2*Theta2');
+z3=a2*Theta2';
+a3=sigmoid(z3);
 binaryy=zeros(m,num_labels);
 for i=1:m 
     binaryy(i,y(i)) = 1;
 end
-%J=sum(sum((-binaryy.*log(a3)-(1-binaryy).*log(1-a3)),2))/m;
 J=sum(sum((-binaryy.*log(a3)),2)+sum(((-1+binaryy).*log(1-a3)),2))/m;
 
+%Regularized J
+Theta12=Theta1.*Theta1;
+Theta22=Theta2.*Theta2;
+Theta12=Theta12(:,2:end);
+Theta22=Theta22(:,2:end);
+R=(lambda*(sum(sum(Theta12))+sum(sum(Theta22))))/(2*m);
+J=J+R;
 
 
+%Backpropogation gradient theta
+deltaout=a3-binaryy;
+deltahid=deltaout*Theta2.*sigmoidGradient([ones(m,1) z2]);
+deltahid=deltahid(:,2:end);
+Theta2_grad=deltaout'*a2;
+Theta1_grad=deltahid'*a1;
 
+
+%Regularized Backpropogation
+RTheta1=[zeros(size(Theta1,1),1) Theta1(:,2:end)];
+RTheta2=[zeros(size(Theta2,1),1) Theta2(:,2:end)];
+
+Theta1_grad=(Theta1_grad+(RTheta1.*lambda))/m;
+Theta2_grad=(Theta2_grad+(RTheta2.*lambda))/m;
 
 
 
