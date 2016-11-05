@@ -4,7 +4,7 @@ This course contains code from the online course i did on coursera.org
 
 https://www.coursera.org/learn/machine-learning
 
-The code is from following Machine Learning Topics and in the same order of Lessons:
+The code is from following Machine Learning Topics and in the same order of "machine-learning-ex":
 
 Lesson 1  Linear Regression
 
